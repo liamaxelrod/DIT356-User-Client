@@ -5,6 +5,7 @@ build site:
     - docker
   script:
     - npm install --progress=false
+    - cd Client
     - npm run build
   artifacts:
     expire_in: 1 week
