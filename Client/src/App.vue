@@ -25,13 +25,27 @@
           </b-collapse>
         </b-navbar>
       </div>
-          <!-- Render the content of the current page view -->
-          <button v-on:click="createConnection()">Connect</button>
+      <div class='col'>
+        <div class="row">
+          <span v-if="this.client.connected">Connection successful!</span>
+        </div>
+        <div class="row">
           <button v-on:click="doSubscribe()">Subscribe</button>
           <button v-on:click="doUnSubscribe()">Unsubscribe</button>
-          <button v-on:click="doPublish()">Publish</button>
-          <router-view v-bind:user="user" />
         </div>
+        <div class="row">
+          <span>Message we will send: {{ this.publish.payload }}</span>
+        </div>
+        <div class="row">
+          <button v-on:click="doPublish()">Publish</button>
+        </div>
+        <div class="row">
+          <span>The response we get: {{ this.receiveNews }}</span>
+        </div>
+      </div>
+      <!-- Render the content of the current page view -->
+      <router-view v-bind:user="user"/>
+    </div>
   </div>
 </template>
 
@@ -61,13 +75,13 @@ export default {
         password: 'dentistimo123!'
       },
       subscription: {
-        topic: 'userClientTest',
+        topic: 'dentistimo/booking/succesful-booking',
         qos: 0
       },
       publish: {
-        topic: 'userClientTest',
+        topic: 'dentistimo/booking/create-booking',
         qos: 0,
-        payload: '{ "msg": "Hello, I am browser." }'
+        payload: '{"userid": 6723, "requestid": 50981, "dentistid": 477612321726, "issuance": 10009099191, "date": "24.06.23", "time": "11:12"}'
       },
       receiveNews: '',
       qosList: [0, 1, 2],
@@ -78,6 +92,9 @@ export default {
       connecting: false,
       retryTimes: 0
     }
+  },
+  mounted() {
+    this.createConnection()
   },
   methods: {
     initData() {
@@ -119,7 +136,7 @@ export default {
             console.log('Connection failed', error)
           })
           this.client.on('message', (topic, message) => {
-            // this.receiveNews = this.receiveNews.concat(message)
+            this.receiveNews = message
             console.log(`Received message ${message} from topic ${topic}`)
           })
         }
