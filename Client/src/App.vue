@@ -25,7 +25,7 @@
           </b-collapse>
         </b-navbar>
       </div>
-      <div class='col'>
+      <div class='col' v-if="(showConnectionInformation==true)">
         <div class="row">
           <span v-if="this.client.connected">Connection successful!</span>
         </div>
@@ -60,6 +60,7 @@ export default {
   },
   data() {
     return {
+      showConnectionInformation: false,
       message: 'none',
       connection: {
         protocol: 'wss',
