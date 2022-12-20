@@ -44,7 +44,7 @@
         </div>
       </div>
       <!-- Render the content of the current page view -->
-      <router-view v-bind:user="user"/>
+      <router-view v-bind:news="this.receiveNews"/>
     </div>
   </div>
 </template>

@@ -1,59 +1,64 @@
 <template>
-  <div class="row">
-    <div class="col-8">
-      <v-calendar :columns="$screens({ default: 1, lg: 2 })"
-                  :rows="$screens({ default: 1, lg: 2 })"
-                  is-expanded
-                  :attributes='attrs'/>
-    </div>
-    <div class="col-4">
-      <h2>Your upcoming appointments</h2>
-      <ul>
-        <li>
-          <span>Thursday 22.12.2022</span>
-        </li>
-        <li>
-          <span>Friday 12.01.2023</span>
-        </li>
-      </ul>
-      <h2>Your past appointments</h2>
-    </div>
-  </div>
+<full-calendar :events="this.events" />
 </template>
 
 <script>
+import FullCalendar from 'vue-fullcalendar'
+
 export default {
+  name: 'Calendar',
   data() {
-    const date = new Date()
-    const year = date.getFullYear()
-    const month = date.getMonth()
     return {
-      attrs: [
+      events: [
         {
-          key: 'today',
-          highlight: true,
-          dates: new Date()
+          title: 'Dental Clinic Vasaplatsen',
+          start: '2022-12-09',
+          cssClass: 'blue',
+          data: { Time: '12:00', Address: 'Vasagatan 1' }
         },
         {
-          highlight: {
-            color: 'purple',
-            fillMode: 'light'
-          },
-          dates: new Date(year, month, 13)
-        },
-        {
-          highlight: {
-            color: 'purple',
-            fillMode: 'outline'
-          },
-          dates: new Date(year, month, 14)
+          title: 'event2',
+          start: '2022-12-20',
+          end: '2022-12-23',
+          cssClass: ['blue']
         }
       ]
     }
+  },
+  components: {
+    FullCalendar
   }
 }
 </script>
 
-<styles>
-
-</styles>
+<style>
+.red {
+  background: rgb(235, 77, 77) !important;
+  color: whitesmoke !important;
+}
+.blue {
+  background: #0092CA !important;
+  color: whitesmoke !important;
+  size-adjust: 150%;
+}
+.orange {
+  background: orange !important;
+  color: white !important;
+}
+.green {
+  background: rgb(49, 155, 49) !important;
+  color: white !important;
+}
+.blue,
+.orange,
+.red,
+.green {
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.event-item {
+  padding: 1px 0 1px 2px !important;
+  size: 200% !important;
+}
+</style>
