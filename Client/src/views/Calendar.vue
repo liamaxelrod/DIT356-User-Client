@@ -1,5 +1,15 @@
 <template>
-<full-calendar :events="this.events" />
+  <div>
+    <div> {{message}} </div>
+    <full-calendar class="test-fc" :events="events"
+      first-day='1' locale="fr"
+      @eventClick="eventClick"
+      @moreClick="moreClick">
+        <template slot="fc-event-card" slot-scope="p">
+            <p><i class="fa">sadfsd</i> {{ p.event.title }} test</p>
+        </template>
+    </full-calendar>
+  </div>
 </template>
 
 <script>
@@ -7,6 +17,9 @@ import FullCalendar from 'vue-fullcalendar'
 
 export default {
   name: 'Calendar',
+  props: {
+    message: Object
+  },
   data() {
     return {
       events: [
@@ -25,8 +38,24 @@ export default {
       ]
     }
   },
+  methods: {
+    'eventClick'(event, jsEvent, pos) {
+      console.log('eventClick', event, jsEvent, pos)
+    },
+    'moreClick'(day, events, jsEvent) {
+      console.log('moreCLick', day, events, jsEvent)
+    }
+  },
+  mounted() {
+    this.$parent.doSubscribe('dentistimo/dentist-office/filtered-office')
+  },
   components: {
     FullCalendar
+  },
+  watch: {
+    message: function (newVal, oldVal) {
+      console.log('this is a trigger function')
+    }
   }
 }
 </script>
@@ -39,7 +68,6 @@ export default {
 .blue {
   background: #0092CA !important;
   color: whitesmoke !important;
-  size-adjust: 150%;
 }
 .orange {
   background: orange !important;
@@ -60,5 +88,6 @@ export default {
 .event-item {
   padding: 1px 0 1px 2px !important;
   size: 200% !important;
+  margin-top: 10px;
 }
 </style>

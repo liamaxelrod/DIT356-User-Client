@@ -44,7 +44,7 @@
         </div>
       </div>
       <!-- Render the content of the current page view -->
-      <router-view v-bind:news="this.receiveNews"/>
+      <router-view v-bind:message="this.receiveNews"/>
     </div>
   </div>
 </template>
@@ -84,7 +84,7 @@ export default {
         qos: 0,
         payload: '{"userid": 6723, "requestid": 50981, "dentistid": 477612321726, "issuance": 10009099191, "date": "24.06.23", "time": "11:12"}'
       },
-      receiveNews: '',
+      receiveNews: {},
       qosList: [0, 1, 2],
       client: {
         connected: false
@@ -137,7 +137,9 @@ export default {
             console.log('Connection failed', error)
           })
           this.client.on('message', (topic, message) => {
-            this.receiveNews = message
+            const jsonString = Buffer.from(message).toString('utf8')
+            const parsedData = JSON.parse(jsonString)
+            this.receiveNews = { msg: parsedData, topic: topic }
             console.log(`Received message ${message} from topic ${topic}`)
           })
         }
@@ -148,9 +150,9 @@ export default {
       console.log('hello')
       console.log(this.client)
     },
-    doSubscribe() {
-      const { topic, qos } = this.subscription
-      this.client.subscribe(topic, { qos }, (error, res) => {
+    doSubscribe(subTopic) {
+      const qos = 2
+      this.client.subscribe(subTopic, { qos }, (error, res) => {
         if (error) {
           console.log('Subscribe to topics error', error)
           return
