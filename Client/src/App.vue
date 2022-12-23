@@ -26,11 +26,7 @@
         </b-navbar>
       </div>
           <!-- Render the content of the current page view -->
-          <button v-on:click="createConnection()">Connect</button>
-          <button v-on:click="doSubscribe()">Subscribe</button>
-          <button v-on:click="doUnSubscribe()">Unsubscribe</button>
-          <button v-on:click="doPublish()">Publish</button>
-          <router-view v-bind:user="user" />
+          <router-view v-bind:message="this.receiveNews" />
         </div>
   </div>
 </template>
@@ -46,7 +42,7 @@ export default {
   },
   data() {
     return {
-      message: 'none',
+      lastMessage: {},
       connection: {
         protocol: 'wss',
         host: 'e33e41c289ad4ac69ae5ef60f456e9c3.s2.eu.hivemq.cloud',
@@ -69,7 +65,7 @@ export default {
         qos: 0,
         payload: '{ "msg": "Hello, I am browser." }'
       },
-      receiveNews: '',
+      receiveNews: {},
       qosList: [0, 1, 2],
       client: {
         connected: false
@@ -78,6 +74,9 @@ export default {
       connecting: false,
       retryTimes: 0
     }
+  },
+  mounted() {
+    this.createConnection()
   },
   methods: {
     initData() {
@@ -119,8 +118,10 @@ export default {
             console.log('Connection failed', error)
           })
           this.client.on('message', (topic, message) => {
-            // this.receiveNews = this.receiveNews.concat(message)
-            console.log(`Received message ${message} from topic ${topic}`)
+            const jsonString = Buffer.from(message).toString('utf8')
+            // const realJson = '{' + jsonString + '}'
+            const parsedData = JSON.parse(jsonString)
+            this.receiveNews = { msg: parsedData, topic: topic }
           })
         }
       } catch (error) {
@@ -130,9 +131,9 @@ export default {
       console.log('hello')
       console.log(this.client)
     },
-    doSubscribe() {
-      const { topic, qos } = this.subscription
-      this.client.subscribe(topic, { qos }, (error, res) => {
+    doSubscribe(subTopic) {
+      const qos = 2
+      this.client.subscribe(subTopic, { qos }, (error, res) => {
         if (error) {
           console.log('Subscribe to topics error', error)
           return
@@ -149,8 +150,8 @@ export default {
         }
       })
     },
-    doPublish() {
-      const { topic, qos, payload } = this.publish
+    doPublish(topic, payload) {
+      const qos = 2
       this.client.publish(topic, payload, { qos }, error => {
         if (error) {
           console.log('Publish error', error)
