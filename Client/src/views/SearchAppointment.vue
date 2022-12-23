@@ -63,7 +63,6 @@ export default {
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 15,
-      center: [57.708, 11.974560],
       date: new Date(),
       mode: 'date',
       markerDetails: []
@@ -71,7 +70,8 @@ export default {
   },
   methods: {
     filter() {
-      console.log(this.date)
+      // clean previous search
+      this.markerDetails = []
       /*
       // send message with date and time formated like this for backend
         {
@@ -103,10 +103,7 @@ export default {
   watch: {
     message: function (newVal, oldVal) {
       console.log(this.message.msg)
-      this.markerDetails = []
       for (let i = 0; i < this.message.msg.length; i++) {
-        console.log(this.message.msg[i].coordinate.latitude)
-        console.log(this.message.msg[i].coordinate.longitude)
         this.markerDetails.push({
           id: this.markerDetails.length,
           location: [this.message.msg[i].coordinate.latitude, this.message.msg[i].coordinate.longitude]
