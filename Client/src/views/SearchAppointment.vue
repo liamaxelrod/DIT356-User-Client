@@ -5,7 +5,7 @@
         <div class="mb-2">
           <div class="mb-2">
             <h1 class="title" >Select a date</h1>
-            <v-calendar
+            <v-date-picker
               v-model="date"
               :mode="mode" is-inline @dayclick="filter()"/>
               <h1 class="title" >Select a time interval</h1>
@@ -33,11 +33,12 @@
 import Vue from 'vue'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css'
-import moment from 'moment'
 import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css' // Re-uses images from ~leaflet package
 import 'leaflet-defaulticon-compatibility'
+import moment from 'moment'
+
 Vue.component('vue-timepicker', VueTimepicker)
 export default {
   components: {
@@ -63,18 +64,14 @@ export default {
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 15,
       center: [57.708, 11.974560],
-      date: moment().format('YYYY-MM-DD'),
-      mode: 'datetime',
+      date: new Date(),
+      mode: 'date',
       markerDetails: []
-    }
-  },
-  computed: {
-    formattedDate() {
-      return moment(this.date).format('YYYY-MM-DD')
     }
   },
   methods: {
     filter() {
+      console.log(this.date)
       /*
       // send message with date and time formated like this for backend
         {
