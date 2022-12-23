@@ -75,15 +75,6 @@ export default {
         username: 'group6_dentistimo',
         password: 'dentistimo123!'
       },
-      subscription: {
-        topic: 'dentistimo/booking/succesful-booking',
-        qos: 0
-      },
-      publish: {
-        topic: 'dentistimo/booking/create-booking',
-        qos: 0,
-        payload: '{"userid": 6723, "requestid": 50981, "dentistid": 477612321726, "issuance": 10009099191, "date": "24.06.23", "time": "11:12"}'
-      },
       receiveNews: {},
       qosList: [0, 1, 2],
       client: {
@@ -139,6 +130,7 @@ export default {
           this.client.on('message', (topic, message) => {
             const jsonString = Buffer.from(message).toString('utf8')
             const parsedData = JSON.parse(jsonString)
+            console.log(parsedData)
             this.receiveNews = { msg: parsedData, topic: topic }
             console.log(`Received message ${message} from topic ${topic}`)
           })
@@ -169,13 +161,14 @@ export default {
         }
       })
     },
-    doPublish() {
-      const { topic, qos, payload } = this.publish
+    doPublish(topic, payload) {
+      const qos = 2
       this.client.publish(topic, payload, { qos }, error => {
         if (error) {
           console.log('Publish error', error)
         }
       })
+      console.log('message published')
     },
     destroyConnection() {
       if (this.client.connected) {
