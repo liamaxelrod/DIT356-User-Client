@@ -25,9 +25,9 @@
           </b-collapse>
         </b-navbar>
       </div>
-          <!-- Render the content of the current page view -->
-          <router-view v-bind:message="this.receiveNews" />
-        </div>
+      <!-- Render the content of the current page view -->
+      <router-view v-bind:message="this.receiveNews"/>
+    </div>
   </div>
 </template>
 
@@ -42,7 +42,12 @@ export default {
   },
   data() {
     return {
+<<<<<<< Client/src/App.vue
       lastMessage: {},
+=======
+      showConnectionInformation: false,
+      message: 'none',
+>>>>>>> Client/src/App.vue
       connection: {
         protocol: 'wss',
         host: 'e33e41c289ad4ac69ae5ef60f456e9c3.s2.eu.hivemq.cloud',
@@ -56,6 +61,7 @@ export default {
         username: 'group6_dentistimo',
         password: 'dentistimo123!'
       },
+<<<<<<< Client/src/App.vue
       subscription: {
         topic: 'userClientTest',
         qos: 0
@@ -65,6 +71,8 @@ export default {
         qos: 0,
         payload: '{ "msg": "Hello, I am browser." }'
       },
+=======
+>>>>>>> Client/src/App.vue
       receiveNews: {},
       qosList: [0, 1, 2],
       client: {
@@ -119,17 +127,22 @@ export default {
           })
           this.client.on('message', (topic, message) => {
             const jsonString = Buffer.from(message).toString('utf8')
+<<<<<<< Client/src/App.vue
             // const realJson = '{' + jsonString + '}'
             const parsedData = JSON.parse(jsonString)
             this.receiveNews = { msg: parsedData, topic: topic }
+=======
+            const parsedData = JSON.parse(jsonString)
+            console.log(parsedData)
+            this.receiveNews = { msg: parsedData, topic: topic }
+            console.log(`Received message ${message} from topic ${topic}`)
+>>>>>>> Client/src/App.vue
           })
         }
       } catch (error) {
         this.connecting = false
         console.log('mqtt.connect error', error)
       }
-      console.log('hello')
-      console.log(this.client)
     },
     doSubscribe(subTopic) {
       const qos = 2
@@ -157,6 +170,7 @@ export default {
           console.log('Publish error', error)
         }
       })
+      console.log('message published')
     },
     destroyConnection() {
       if (this.client.connected) {
