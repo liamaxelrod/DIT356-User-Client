@@ -102,12 +102,13 @@ export default {
   },
   watch: {
     message: function (newVal, oldVal) {
-      console.log(this.message.msg)
-      for (let i = 0; i < this.message.msg.length; i++) {
-        this.markerDetails.push({
-          id: this.markerDetails.length,
-          location: [this.message.msg[i].coordinate.latitude, this.message.msg[i].coordinate.longitude]
-        })
+      if (this.message.topic === 'dentistimo/dentist-office/filtered-office') {
+        for (let i = 0; i < this.message.msg.length; i++) {
+          this.markerDetails.push({
+            id: this.markerDetails.length,
+            location: [this.message.msg[i].coordinate.latitude, this.message.msg[i].coordinate.longitude]
+          })
+        }
       }
     }
   }
