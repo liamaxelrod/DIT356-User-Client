@@ -49,14 +49,7 @@ export default {
         select: this.handleDateSelect,
         eventClick: this.handleEventClick,
         eventsSet: this.handleEvents,
-        events: [
-          {
-            title: 'Dental Clinic Vasaplatsen',
-            start: '2022-12-22T12:00:00',
-            time: '2022-12-22 12:00',
-            key: 932236592
-          }
-        ],
+        events: [],
         eventBackgroundColor: '#0092CA',
         eventTextColor: 'white',
         eventTimeFormat: { // like '14:30:00'
@@ -69,7 +62,6 @@ export default {
   },
   methods: {
     handleDateClick: function (arg) {
-      console.log('hello')
       console.log(arg.dateStr)
     },
     handleEventClick: function (arg) {
@@ -93,8 +85,6 @@ export default {
   },
   watch: {
     message: function (newVal, oldVal) {
-      console.log('this is a trigger function')
-      console.log(this.message.msg[0])
       for (let i = 0; i < this.message.msg.length; i++) {
         const msg = this.message.msg[i]
         const event = {
@@ -104,7 +94,6 @@ export default {
           key: msg.requestd
         }
         this.calendarOptions.events.push(event)
-        console.log(this.message.msg[i])
       }
     }
   }

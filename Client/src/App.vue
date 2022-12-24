@@ -139,8 +139,6 @@ export default {
         this.connecting = false
         console.log('mqtt.connect error', error)
       }
-      console.log('hello')
-      console.log(this.client)
     },
     doSubscribe(subTopic) {
       const qos = 2
