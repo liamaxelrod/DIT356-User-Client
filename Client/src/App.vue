@@ -25,24 +25,6 @@
           </b-collapse>
         </b-navbar>
       </div>
-      <div class='col' v-if="(showConnectionInformation==true)">
-        <div class="row">
-          <span v-if="this.client.connected">Connection successful!</span>
-        </div>
-        <div class="row">
-          <button v-on:click="doSubscribe()">Subscribe</button>
-          <button v-on:click="doUnSubscribe()">Unsubscribe</button>
-        </div>
-        <div class="row">
-          <span>Message we will send: {{ this.publish.payload }}</span>
-        </div>
-        <div class="row">
-          <button v-on:click="doPublish()">Publish</button>
-        </div>
-        <div class="row">
-          <span>The response we get: {{ this.receiveNews }}</span>
-        </div>
-      </div>
       <!-- Render the content of the current page view -->
       <router-view v-bind:message="this.receiveNews"/>
     </div>
@@ -60,6 +42,7 @@ export default {
   },
   data() {
     return {
+      lastMessage: {},
       showConnectionInformation: false,
       message: 'none',
       connection: {
@@ -129,10 +112,9 @@ export default {
           })
           this.client.on('message', (topic, message) => {
             const jsonString = Buffer.from(message).toString('utf8')
+            // const realJson = '{' + jsonString + '}'
             const parsedData = JSON.parse(jsonString)
-            console.log(parsedData)
             this.receiveNews = { msg: parsedData, topic: topic }
-            console.log(`Received message ${message} from topic ${topic}`)
           })
         }
       } catch (error) {
