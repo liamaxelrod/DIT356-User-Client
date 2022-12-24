@@ -42,12 +42,9 @@ export default {
   },
   data() {
     return {
-<<<<<<< Client/src/App.vue
       lastMessage: {},
-=======
       showConnectionInformation: false,
       message: 'none',
->>>>>>> Client/src/App.vue
       connection: {
         protocol: 'wss',
         host: 'e33e41c289ad4ac69ae5ef60f456e9c3.s2.eu.hivemq.cloud',
@@ -61,18 +58,6 @@ export default {
         username: 'group6_dentistimo',
         password: 'dentistimo123!'
       },
-<<<<<<< Client/src/App.vue
-      subscription: {
-        topic: 'userClientTest',
-        qos: 0
-      },
-      publish: {
-        topic: 'userClientTest',
-        qos: 0,
-        payload: '{ "msg": "Hello, I am browser." }'
-      },
-=======
->>>>>>> Client/src/App.vue
       receiveNews: {},
       qosList: [0, 1, 2],
       client: {
@@ -127,16 +112,9 @@ export default {
           })
           this.client.on('message', (topic, message) => {
             const jsonString = Buffer.from(message).toString('utf8')
-<<<<<<< Client/src/App.vue
             // const realJson = '{' + jsonString + '}'
             const parsedData = JSON.parse(jsonString)
             this.receiveNews = { msg: parsedData, topic: topic }
-=======
-            const parsedData = JSON.parse(jsonString)
-            console.log(parsedData)
-            this.receiveNews = { msg: parsedData, topic: topic }
-            console.log(`Received message ${message} from topic ${topic}`)
->>>>>>> Client/src/App.vue
           })
         }
       } catch (error) {
