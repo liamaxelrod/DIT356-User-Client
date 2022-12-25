@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import SearchAppointment from './views/SearchAppointment.vue'
+import Dentist from './views/Dentist.vue'
 import User from './views/User.vue'
 import Calendar from './views/Calendar.vue'
 import SignIn from './views/SignIn.vue'
@@ -22,6 +23,11 @@ export default new Router({
       path: '/search-appointment',
       name: 'search-appointment',
       component: SearchAppointment
+    },
+    {
+      path: '/search-appointment/book-dentist/:id',
+      name: 'book-dentist',
+      component: Dentist
     },
     {
       path: '/user',

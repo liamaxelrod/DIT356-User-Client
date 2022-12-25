@@ -24,7 +24,11 @@
         :options={}
         style="height: 100%; width: 100%; z-index: 0">
         <l-tile-layer :url="url" :attribution="attribution" />
-        <l-marker v-for="marker in markerDetails" :key="marker.id" :lat-lng="marker.location" :icon="icon"/>
+        <l-marker v-for="marker in markerDetails"
+        :key="marker.id"
+        :lat-lng="marker.location"
+        :icon="icon"
+        @click="markerSelected(marker.id)"/>
       </l-map>
       </div>
   </div>
@@ -98,6 +102,14 @@ export default {
       this.$parent.doPublish(searchTopic, payload)
       const subscribeTopic = 'dentistimo/dentist-office/filtered-office'
       this.$parent.doSubscribe(subscribeTopic)
+    },
+    markerSelected(markerID) {
+      console.log(markerID)
+      console.log(this.markerDetails[markerID])
+      // get DB id for dentist office
+      const dentistID = this.markerDetails[markerID].dentistID
+      // change to dentist page
+      this.$router.push({ path: `/search-appointment/book-dentist/${dentistID}` })
     }
   },
   watch: {
@@ -105,6 +117,7 @@ export default {
       if (this.message.topic === 'dentistimo/dentist-office/filtered-office') {
         for (let i = 0; i < this.message.msg.length; i++) {
           this.markerDetails.push({
+            dentistID: this.message.msg[i]._id,
             id: this.markerDetails.length,
             location: [this.message.msg[i].coordinate.latitude, this.message.msg[i].coordinate.longitude]
           })
