@@ -27,13 +27,13 @@
     </div>
     <div class="row">
       <div class="col">
-        <img src="@/assets/gothenburg.jpeg" alt="logo" width="100%" />
+        <img src="@/assets/goteborg.jpg" alt="logo" width="100%" />
       </div>
       <div class="col">
         <img src="@/assets/pug_toothbrush.jpeg" alt="logo" width="100%" />
       </div>
       <div class="col">
-        <img src="@/assets/dentist.jpeg" alt="logo" width="100%" />
+        <img src="@/assets/dentist.jpg" alt="logo" width="100%" />
       </div>
     </div>
   </div>
