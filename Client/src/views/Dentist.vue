@@ -9,13 +9,12 @@
         </div>
         <div class="col">
           <div class="row">
-            <div class="col">
-              <v-date-picker/>
-            </div>
-            <div class="col">
-              <h3>Available Times</h3>
-              Here we can display the available Times for this day
-            </div>
+            <FullCalendar :options="calendarOptions">
+              <template v-slot:eventContent='arg' id="event">
+                <b>{{ arg.timeText }}</b>
+                <b class="cut-text">{{ arg.event.title }}</b>
+              </template>
+            </FullCalendar>
           </div>
           <div class="row">
             <div class="col">
@@ -37,6 +36,10 @@
 </template>
 
 <script>
+import FullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import timeGridPlugin from '@fullcalendar/timegrid'
 // const exerciseId = this.$route.params.id
 export default {
   name: 'Calendar',
@@ -45,6 +48,47 @@ export default {
   },
   data() {
     return {
+      calendarOptions: {
+        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+        initialView: 'dayGridDay',
+        dateClick: this.handleDateClick,
+        selectable: true,
+        selectMirror: true,
+        dayMaxEvents: true,
+        weekends: false,
+        select: this.handleDateSelect,
+        eventClick: this.handleEventClick,
+        eventsSet: this.handleEvents,
+        events: [
+          {
+            title: 'Dentist name',
+            start: '2022-12-29T08:00:00',
+            key: 'something'
+          },
+          {
+            title: 'Dentist name',
+            start: '2022-12-29T08:30:00',
+            key: 'something'
+          },
+          {
+            title: 'Dentist name',
+            start: '2022-12-29T09:00:00',
+            key: 'something'
+          },
+          {
+            title: 'Dentist name',
+            start: '2022-12-29T10:00:00',
+            key: 'something'
+          }
+        ],
+        eventBackgroundColor: '#0092CA',
+        eventTextColor: 'white',
+        eventTimeFormat: { // like '14:30:00'
+          hour: '2-digit',
+          minute: '2-digit',
+          meridiem: false
+        }
+      },
       dentistOfficeInfo: {
         name: 'Dental Clinic Vasaplatsen',
         address: 'Vasagatan 1 41124 Göreborg',
@@ -53,6 +97,9 @@ export default {
         pricelist: ''
       }
     }
+  },
+  components: {
+    FullCalendar
   },
   methods: {
     requestAppointment() {
