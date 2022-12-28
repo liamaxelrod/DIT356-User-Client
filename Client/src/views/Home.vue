@@ -27,13 +27,13 @@
     </div>
     <div class="row">
       <div class="col">
-        <img src="@/assets/goteborg.jpg" alt="logo" width="100%" />
+        <img src="@/assets/goteborg.jpg" alt="logo" width="100%" class="hidden"/>
       </div>
       <div class="col">
         <img src="@/assets/pug_toothbrush.jpeg" alt="logo" width="100%" />
       </div>
       <div class="col">
-        <img src="@/assets/dentist.jpg" alt="logo" width="100%" />
+        <img src="@/assets/dentist.jpg" alt="logo" width="100%" class="hidden"/>
       </div>
     </div>
   </div>
@@ -87,7 +87,10 @@ h4 {
 
 @media only screen and (max-width: 768px)  {
   .col {
-    width: 200%;
+    min-width: 100%;
+  }
+  .hidden {
+    display: none;
   }
 }
 </style>
