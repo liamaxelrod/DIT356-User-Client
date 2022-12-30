@@ -13,7 +13,7 @@
         placeholder="Password"
         type="password">
     </b-form-input>
-      <b-button class="button" variant="primary" @click="submit">Sign In</b-button>
+      <b-button class="button" variant="primary" @click="login">Sign In</b-button>
       <div class="row">
         <a href="/forgetPassword">Forget password</a>
         <a href="/SignUp">Register New Account</a>
@@ -22,6 +22,36 @@
 </template>
 
 <script>
+export default {
+  name: 'home',
+  probs: {
+    message: Object,
+    user: String
+  },
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    login() {
+      const subTopic = 'zdwgf'
+      this.$parent.doSubscribe(subTopic)
+      const pubTopic = 'uzgewf'
+      const payload = '{bcwjhdbsvc:hvdcsv}'
+      this.$parent.doPublish(pubTopic, payload)
+    }
+  },
+  watch: {
+    message: function (newVal, oldVal) {
+      if (this.message.topic === 'zdwgf') {
+        // I am not sure which is the eway we should do it
+        this.$parent.user = this.message.msg.user
+        localStorage.setItem('token', this.message.msg.user)
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

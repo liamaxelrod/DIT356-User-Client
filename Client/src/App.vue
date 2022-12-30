@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div>
+    <div v-if="IsLoggedIn">
       <menu-header/>
       <div>
         <b-navbar toggleable="lg" type="dark">
@@ -26,7 +26,10 @@
         </b-navbar>
       </div>
       <!-- Render the content of the current page view -->
-      <router-view v-bind:message="this.receiveNews"/>
+      <router-view v-bind:message="this.receiveNews" v-bind:user="this.user"/>
+    </div>
+    <div v-else>
+      <router-view v-bind:message="this.receiveNews" v-bind:user="this.user"/>
     </div>
   </div>
 </template>
@@ -42,6 +45,8 @@ export default {
   },
   data() {
     return {
+      user: '',
+      isLoggedIn: false,
       lastMessage: {},
       showConnectionInformation: false,
       message: 'none',
@@ -70,6 +75,13 @@ export default {
   },
   mounted() {
     this.createConnection()
+    if (localStorage.getItem('token') === null) {
+      this.$router.push('/sign-in')
+      this.isLoggedIn = false
+    } else {
+      this.isLoggedIn = true
+      this.user = localStorage.getItem('token')
+    }
   },
   methods: {
     initData() {
