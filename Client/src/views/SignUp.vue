@@ -4,13 +4,13 @@
       <h2>Account Signup</h2>
       <b-form-input
         class="input"
-        v-model="Firstname"
-        placeholder="Firstname">
+        v-model="FirstName"
+        placeholder="First name">
       </b-form-input>
       <b-form-input
         class="input"
-        v-model="Lastname"
-        placeholder="Lastname">
+        v-model="LastName"
+        placeholder="Last name">
       </b-form-input>
       <b-form-input
         class="input"
@@ -29,11 +29,48 @@
         placeholder="passwordCheck"
         type="password">
       </b-form-input>
-      <b-button class="button" variant="primary" @click="submit">Sign Up</b-button>
+      <b-button class="button" variant="primary" @click="signUp">Sign Up</b-button>
     </div>
 </template>
 
 <script>
+export default {
+  name: 'sign-up',
+  props: {
+    message: Object
+  },
+  data() {
+    return {
+      FirstName: '',
+      LastName: '',
+      Email: '',
+      Password: '',
+      passwordCheck: '',
+      subTopic: 'zdwgf'
+    }
+  },
+  mounted() {
+    this.$parent.doSubscribe(this.subTopic)
+  },
+  methods: {
+    signUp() {
+      const pubTopic = 'dentistimo/login/user'
+      const requestId = Math.floor(Math.random() * 10000000)
+      const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
+      this.$parent.doPublish(pubTopic, payload)
+    }
+  },
+  watch: {
+    message: function (newVal, oldVal) {
+      if (this.message.topic === 'zdwgf') {
+        // I am not sure which is the eway we should do it
+        localStorage.setItem('token', JSON.stringify(this.message.msg))
+        this.$parent.doUnSubscribe(this.subTopic)
+        this.$parent.login()
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -146,9 +146,8 @@ export default {
         console.log('Subscribe to topics res', res)
       })
     },
-    doUnSubscribe() {
-      const { topic } = this.subscription
-      this.client.unsubscribe(topic, error => {
+    doUnSubscribe(subTopic) {
+      this.client.unsubscribe(subTopic, error => {
         if (error) {
           console.log('Unsubscribe error', error)
         }

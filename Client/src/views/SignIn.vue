@@ -16,26 +16,26 @@
       <b-button class="button" variant="primary" @click="login">Sign In</b-button>
       <div class="row">
         <a href="/forgetPassword">Forget password</a>
-        <a href="/SignUp">Register New Account</a>
+        <a @click="switchToSignUp">Register New Account</a>
       </div>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'home',
+  name: 'sign-in',
   props: {
     message: Object
   },
   data() {
     return {
       Email: '',
-      Password: ''
+      Password: '',
+      subTopic: 'zdwgf'
     }
   },
   mounted() {
-    const subTopic = 'zdwgf'
-    this.$parent.doSubscribe(subTopic)
+    this.$parent.doSubscribe(this.subTopic)
   },
   methods: {
     login() {
@@ -43,6 +43,10 @@ export default {
       const requestId = Math.floor(Math.random() * 10000000)
       const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
       this.$parent.doPublish(pubTopic, payload)
+    },
+    switchToSignUp() {
+      this.$parent.doUnSubscribe(this.subTopic)
+      this.$router.push('/sign-up')
     }
   },
   watch: {
