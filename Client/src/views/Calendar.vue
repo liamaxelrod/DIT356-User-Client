@@ -34,7 +34,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 export default {
   name: 'Calendar',
   props: {
-    message: Object
+    message: Object,
+    user: Object
   },
   data() {
     return {
