@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="IsLoggedIn">
+    <div v-if="isLoggedIn">
       <menu-header/>
       <div>
         <b-navbar toggleable="lg" type="dark">
@@ -29,7 +29,8 @@
       <router-view v-bind:message="this.receiveNews" v-bind:user="this.user"/>
     </div>
     <div v-else>
-      <router-view v-bind:message="this.receiveNews" v-bind:user="this.user"/>
+      <!-- Render the content of the current page view -->
+      <router-view v-bind:message="this.receiveNews"/>
     </div>
   </div>
 </template>
@@ -75,12 +76,12 @@ export default {
   },
   mounted() {
     this.createConnection()
-    if (localStorage.getItem('token') === null) {
+    if (localStorage.getItem('token') === null || this.isLoggedIn === false) {
       this.$router.push('/sign-in')
       this.isLoggedIn = false
     } else {
       this.isLoggedIn = true
-      this.user = localStorage.getItem('token')
+      this.user = JSON.parse(localStorage.getItem('token'))
     }
   },
   methods: {
@@ -160,7 +161,6 @@ export default {
           console.log('Publish error', error)
         }
       })
-      console.log('message published')
     },
     destroyConnection() {
       if (this.client.connected) {
@@ -173,6 +173,11 @@ export default {
           console.log('Disconnect failed', error.toString())
         }
       }
+    },
+    login() {
+      this.isLoggedIn = true
+      this.user = JSON.parse(localStorage.getItem('token'))
+      this.$router.push('/')
     }
   }
 }

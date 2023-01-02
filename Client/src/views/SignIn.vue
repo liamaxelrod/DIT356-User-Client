@@ -24,21 +24,24 @@
 <script>
 export default {
   name: 'home',
-  probs: {
-    message: Object,
-    user: String
+  props: {
+    message: Object
   },
   data() {
     return {
-
+      Email: '',
+      Password: ''
     }
+  },
+  mounted() {
+    const subTopic = 'zdwgf'
+    this.$parent.doSubscribe(subTopic)
   },
   methods: {
     login() {
-      const subTopic = 'zdwgf'
-      this.$parent.doSubscribe(subTopic)
-      const pubTopic = 'uzgewf'
-      const payload = '{bcwjhdbsvc:hvdcsv}'
+      const pubTopic = 'dentistimo/login/user'
+      const requestId = Math.floor(Math.random() * 10000000)
+      const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
       this.$parent.doPublish(pubTopic, payload)
     }
   },
@@ -46,8 +49,8 @@ export default {
     message: function (newVal, oldVal) {
       if (this.message.topic === 'zdwgf') {
         // I am not sure which is the eway we should do it
-        this.$parent.user = this.message.msg.user
-        localStorage.setItem('token', this.message.msg.user)
+        localStorage.setItem('token', JSON.stringify(this.message.msg))
+        this.$parent.login()
       }
     }
   }
