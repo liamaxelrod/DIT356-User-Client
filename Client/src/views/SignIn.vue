@@ -15,7 +15,7 @@
     </b-form-input>
       <b-button class="button" variant="primary" @click="login">Sign In</b-button>
       <div class="row">
-        <a href="/forgetPassword">Forget password</a>
+        <a @click="forgotPassword">Forgot password</a>
         <a @click="switchToSignUp">Register New Account</a>
       </div>
     </div>
@@ -47,6 +47,10 @@ export default {
     switchToSignUp() {
       this.$parent.doUnSubscribe(this.subTopic)
       this.$router.push('/sign-up')
+    },
+    forgotPassword() {
+      this.$parent.doUnSubscribe(this.subTopic)
+      this.$router.push('/forgot-password')
     }
   },
   watch: {
