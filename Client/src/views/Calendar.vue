@@ -77,7 +77,7 @@ export default {
   },
   mounted() {
     this.$parent.doSubscribe('dentistimo/user-appointment/all-appointments')
-    const message = { userid: 5 }
+    const message = { userid: this.user.userId }
     const payload = JSON.stringify(message)
     this.$parent.doPublish('dentistimo/user-appointment/get-all-appointments', payload)
   },
