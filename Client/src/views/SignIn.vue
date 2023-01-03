@@ -37,7 +37,8 @@ export default {
   methods: {
     login() {
       // generate request id and subscribe to topic
-      const requestId = Math.floor(Math.random() * 10000000)
+      // const requestId = Math.floor(Math.random() * 10000000)
+      const requestId = 1000
       this.subTopic = `dentistimo/login/user/${requestId}`
       this.$parent.doSubscribe(this.subTopic)
       // publish message
@@ -56,7 +57,7 @@ export default {
   },
   watch: {
     message: function (newVal, oldVal) {
-      if (this.message.topic === 'zdwgf') {
+      if (this.message.topic === this.subTopic) {
         // set the user variable in App.vue to the message reveived
         localStorage.setItem('token', JSON.stringify(this.message.msg))
         this.$parent.doUnSubscribe(this.subTopic)

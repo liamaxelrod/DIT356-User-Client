@@ -64,7 +64,7 @@ export default {
   },
   watch: {
     message: function (newVal, oldVal) {
-      if (this.message.topic === 'zdwgf') {
+      if (this.message.topic === this.subTopic) {
         // I am not sure which is the eway we should do it
         console.log(this.message)
       }

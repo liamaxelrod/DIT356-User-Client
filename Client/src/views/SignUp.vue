@@ -63,7 +63,7 @@ export default {
   },
   watch: {
     message: function (newVal, oldVal) {
-      if (this.message.topic === 'zdwgf') {
+      if (this.message.topic === this.subTopic) {
         // Set user variable in App.vue
         localStorage.setItem('token', JSON.stringify(this.message.msg))
         this.$parent.doUnSubscribe(this.subTopic)
