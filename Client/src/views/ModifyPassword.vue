@@ -37,6 +37,40 @@
 </template>
 
 <script>
+export default {
+  name: 'forgot-password',
+  props: {
+    message: Object
+  },
+  data() {
+    return {
+      Email: '',
+      Password: '',
+      subTopic: ''
+    }
+  },
+  methods: {
+    submit() {
+      // TODO: change topic names to the correct ones
+      // generate request id and subscribe to topic
+      const requestId = Math.floor(Math.random() * 10000000)
+      this.subTopic = `dentistimo/login/user/${requestId}`
+      this.$parent.doSubscribe(this.subTopic)
+      // publish message
+      const pubTopic = 'dentistimo/login/user'
+      const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
+      this.$parent.doPublish(pubTopic, payload)
+    }
+  },
+  watch: {
+    message: function (newVal, oldVal) {
+      if (this.message.topic === 'zdwgf') {
+        // I am not sure which is the eway we should do it
+        console.log(this.message)
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

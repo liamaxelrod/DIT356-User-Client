@@ -46,16 +46,17 @@ export default {
       Email: '',
       Password: '',
       passwordCheck: '',
-      subTopic: 'zdwgf'
+      subTopic: ''
     }
-  },
-  mounted() {
-    this.$parent.doSubscribe(this.subTopic)
   },
   methods: {
     signUp() {
-      const pubTopic = 'dentistimo/login/user'
+      // subscribe to topic with generated request id
       const requestId = Math.floor(Math.random() * 10000000)
+      this.subTopic = `dentistimo/register/user/${requestId}`
+      this.$parent.doSubscribe(this.subTopic)
+      // publish message to topic
+      const pubTopic = 'dentistimo/register/user'
       const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
       this.$parent.doPublish(pubTopic, payload)
     }
@@ -63,7 +64,7 @@ export default {
   watch: {
     message: function (newVal, oldVal) {
       if (this.message.topic === 'zdwgf') {
-        // I am not sure which is the eway we should do it
+        // Set user variable in App.vue
         localStorage.setItem('token', JSON.stringify(this.message.msg))
         this.$parent.doUnSubscribe(this.subTopic)
         this.$parent.login()
