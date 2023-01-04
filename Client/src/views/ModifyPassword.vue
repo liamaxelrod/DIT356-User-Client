@@ -9,14 +9,15 @@
           placeholder="Email"
         ></b-form-input>
         <b-input-group-append>
-          <b-button variant="primary" class="send_btn" @click="send"
+          <b-button variant="primary" class="send_btn" @click="sendMail"
             >send</b-button
           >
         </b-input-group-append>
       </b-input-group>
+      <h2>Reset Password</h2>
       <b-form-input
         class="input"
-        v-model="code"
+        v-model="Code"
         placeholder="code"
         type="text"
       ></b-form-input>
@@ -28,7 +29,7 @@
       ></b-form-input>
       <b-form-input
         class="input"
-        v-model="passwordCheck"
+        v-model="PasswordCheck"
         placeholder="passwordCheck"
         type="password"
       ></b-form-input>
@@ -46,27 +47,52 @@ export default {
     return {
       Email: '',
       Password: '',
-      subTopic: ''
+      PasswordCheck: '',
+      subTopicMail: '',
+      subTopic: '',
+      subTopicError: '',
+      Code: ''
     }
   },
   methods: {
+    sendMail() {
+      // generate request id and subscribe to topic
+      const requestId = Math.floor(Math.random() * 10000000)
+      this.subTopicMail = `dentistimo/send-email-code/${requestId}`
+      this.$parent.doSubscribe(this.subTopicMail)
+      // publish message
+      const pubTopic = 'dentistimo/send-email-code'
+      const payload = `{"email": "${this.Email}", "requestId": "${requestId}"}`
+      this.$parent.doPublish(pubTopic, payload)
+    },
     submit() {
       // TODO: change topic names to the correct ones
       // generate request id and subscribe to topic
       const requestId = Math.floor(Math.random() * 10000000)
-      this.subTopic = `dentistimo/login/user/${requestId}`
+      this.subTopic = `dentistimo/reset-password/user/${requestId}`
+      this.$parent.doSubscribe(this.subTopic)
+      this.subTopicError = `dentistimo/reset-password/error/${requestId}`
       this.$parent.doSubscribe(this.subTopic)
       // publish message
-      const pubTopic = 'dentistimo/login/user'
-      const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
+      const pubTopic = 'dentistimo/reset-password/user'
+      const payload = `{"newPassword": "${this.Password}", "passwordCheck": "${this.PasswordCheck}", "userCode": "${this.Code}", "email": "${this.Email}", "requestId": "${requestId}"}`
       this.$parent.doPublish(pubTopic, payload)
     }
   },
   watch: {
     message: function (newVal, oldVal) {
       if (this.message.topic === this.subTopic) {
-        // I am not sure which is the eway we should do it
-        console.log(this.message)
+        window.confirm(this.message.msg.status)
+        this.$parent.doUnSubscribe(this.subTopic)
+        this.$parent.doUnSubscribe(this.subTopicMail)
+        this.$parent.doUnSubscribe(this.subTopicError)
+        this.$router.push('/sign-in')
+      }
+      if (this.message.topic === this.subTopicMail) {
+        window.confirm(this.message.msg)
+      }
+      if (this.message.topic === this.subTopicError) {
+        this.$bvModal.msgBoxOk(this.message.msg)
       }
     }
   }

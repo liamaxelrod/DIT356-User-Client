@@ -19,7 +19,7 @@
                   <b-icon icon="person-circle" aria-hidden="true"></b-icon>
                 </template>
                 <b-dropdown-item router-link class="nav-link" to="/user" v-bind:userId="this.user">Profile</b-dropdown-item>
-                <b-dropdown-item router-link class="nav-link" to="/login" v-on:click="logOut()">Sign Out</b-dropdown-item>
+                <b-dropdown-item router-link class="nav-link" to="/sign-in" v-on:click="logOut()">Sign Out</b-dropdown-item>
               </b-nav-item-dropdown>
             </b-navbar-nav>
           </b-collapse>
@@ -76,7 +76,7 @@ export default {
   },
   mounted() {
     this.createConnection()
-    if (localStorage.getItem('token') === null || this.isLoggedIn === false) {
+    if (localStorage.getItem('token') === null) {
       this.$router.push('/sign-in')
       this.isLoggedIn = false
     } else {
@@ -125,8 +125,12 @@ export default {
           })
           this.client.on('message', (topic, message) => {
             const jsonString = Buffer.from(message).toString('utf8')
-            // const realJson = '{' + jsonString + '}'
-            const parsedData = JSON.parse(jsonString)
+            let parsedData = jsonString
+            try {
+              parsedData = JSON.parse(jsonString)
+            } catch (error) {
+              console.log(error)
+            }
             this.receiveNews = { msg: parsedData, topic: topic }
           })
         }
@@ -177,6 +181,12 @@ export default {
       this.isLoggedIn = true
       this.user = JSON.parse(localStorage.getItem('token'))
       this.$router.push('/')
+    },
+    logOut() {
+      localStorage.setItem('token', null)
+      this.isLoggedIn = false
+      this.user = {}
+      localStorage.clear()
     }
   }
 }

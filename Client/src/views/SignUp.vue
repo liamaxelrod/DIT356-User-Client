@@ -46,7 +46,8 @@ export default {
       Email: '',
       Password: '',
       passwordCheck: '',
-      subTopic: ''
+      subTopic: '',
+      subTopicError: ''
     }
   },
   methods: {
@@ -54,10 +55,12 @@ export default {
       // subscribe to topic with generated request id
       const requestId = Math.floor(Math.random() * 10000000)
       this.subTopic = `dentistimo/register/user/${requestId}`
+      this.subTopicError = `dentistimo/register/error/${requestId}`
       this.$parent.doSubscribe(this.subTopic)
+      this.$parent.doSubscribe(this.subTopicError)
       // publish message to topic
       const pubTopic = 'dentistimo/register/user'
-      const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
+      const payload = `{"password": "${this.Password}", "passwordCheck": "${this.passwordCheck}", "email": "${this.Email}", "requestId": "${requestId}", "firstName": "${this.FirstName}", "lastName": "${this.LastName}"}`
       this.$parent.doPublish(pubTopic, payload)
     }
   },
@@ -67,7 +70,16 @@ export default {
         // Set user variable in App.vue
         localStorage.setItem('token', JSON.stringify(this.message.msg))
         this.$parent.doUnSubscribe(this.subTopic)
+        this.$parent.doUnSubscribe(this.subTopicError)
         this.$parent.login()
+      }
+      if (this.message.topic === this.subTopicError) {
+        // Alert user about error
+        window.confirm(this.message.msg)
+        this.$parent.doUnSubscribe(this.subTopic)
+        this.$parent.doUnSubscribe(this.subTopicError)
+        this.subTopic = ''
+        this.subTopicError = ''
       }
     }
   }

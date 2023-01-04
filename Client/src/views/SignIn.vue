@@ -31,7 +31,8 @@ export default {
     return {
       Email: '',
       Password: '',
-      subTopic: ''
+      subTopic: '',
+      subTopicError: ''
     }
   },
   methods: {
@@ -41,17 +42,29 @@ export default {
       const requestId = 1000
       this.subTopic = `dentistimo/login/user/${requestId}`
       this.$parent.doSubscribe(this.subTopic)
+      this.subTopicError = `dentistimo/login/error/${requestId}`
+      this.$parent.doSubscribe(this.subTopic)
       // publish message
       const pubTopic = 'dentistimo/login/user'
-      const payload = `{"password": "${this.Password}"", "email": "${this.Email}", "requestId": "${requestId}"}`
+      const payload = `{"password": "${this.Password}", "email": "${this.Email}", "requestId": "${requestId}"}`
       this.$parent.doPublish(pubTopic, payload)
     },
     switchToSignUp() {
-      this.$parent.doUnSubscribe(this.subTopic)
+      if (this.subTopic !== '') {
+        this.$parent.doUnSubscribe(this.subTopic)
+      }
+      if (this.subTopicError !== '') {
+        this.$parent.doUnSubscribe(this.subTopicError)
+      }
       this.$router.push('/sign-up')
     },
     forgotPassword() {
-      this.$parent.doUnSubscribe(this.subTopic)
+      if (this.subTopic !== '') {
+        this.$parent.doUnSubscribe(this.subTopic)
+      }
+      if (this.subTopicError !== '') {
+        this.$parent.doUnSubscribe(this.subTopicError)
+      }
       this.$router.push('/forgot-password')
     }
   },
@@ -61,7 +74,16 @@ export default {
         // set the user variable in App.vue to the message reveived
         localStorage.setItem('token', JSON.stringify(this.message.msg))
         this.$parent.doUnSubscribe(this.subTopic)
+        this.$parent.doUnSubscribe(this.subTopicError)
         this.$parent.login()
+      }
+      if (this.message.topic === this.subTopicError) {
+        // display error message to user
+        window.confirm(this.message.msg)
+        this.$parent.doUnSubscribe(this.subTopic)
+        this.$parent.doUnSubscribe(this.subTopicError)
+        this.subTopic = ''
+        this.subTopicError = ''
       }
     }
   }
