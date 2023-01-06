@@ -47,7 +47,8 @@ export default {
     LMarker
   },
   props: {
-    message: Object
+    message: Object,
+    user: Object
   },
   data() {
     return {
@@ -87,6 +88,7 @@ export default {
       const toTime = this.ToTime.HH + ':' + this.ToTime.mm
       // create JSON object
       const request = {
+        idToken: this.user.idToken,
         date: date,
         from: fromTime,
         to: toTime
@@ -96,7 +98,7 @@ export default {
       const searchTopic = 'dentistimo/dentist-office/fetch-availability'
       const payload = JSON.stringify(request)
       this.$parent.doPublish(searchTopic, payload)
-      const subscribeTopic = 'dentistimo/dentist-office/filtered-office'
+      const subscribeTopic = 'dentistimo/dentist-office/filtered-office' + this.user.idToken
       this.$parent.doSubscribe(subscribeTopic)
     }
   },
