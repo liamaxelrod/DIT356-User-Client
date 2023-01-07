@@ -22,8 +22,6 @@ To run the application you need to follow these steps:
 - Once that installation is complete type "npm run serve"
 - Then open the displayed URL in a browser of your choice
 
-  
-![Logo](./img/Page_Structure.png "Page structure")
 ## Usage
 
 ### Login
