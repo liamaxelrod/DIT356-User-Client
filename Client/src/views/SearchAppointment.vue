@@ -24,7 +24,11 @@
         :options={}
         style="height: 100%; width: 100%; z-index: 0">
         <l-tile-layer :url="url" :attribution="attribution" />
-        <l-marker v-for="marker in markerDetails" :key="marker.id" :lat-lng="marker.location" :icon="icon"/>
+        <l-marker v-for="marker in markerDetails"
+        :key="marker.id"
+        :lat-lng="marker.location"
+        :icon="icon"
+        @click="markerSelected(marker.id)"/>
       </l-map>
       </div>
   </div>
@@ -98,16 +102,28 @@ export default {
       const searchTopic = 'dentistimo/dentist-office/fetch-availability'
       const payload = JSON.stringify(request)
       this.$parent.doPublish(searchTopic, payload)
-      const subscribeTopic = 'dentistimo/dentist-office/filtered-office' + this.user.idToken
+      const subscribeTopic = 'dentistimo/dentist-office/filtered-office/' + this.user.idToken
+      console.log(subscribeTopic)
       this.$parent.doSubscribe(subscribeTopic)
+    },
+    markerSelected(markerID) {
+      console.log(markerID)
+      console.log(this.markerDetails[markerID])
+      // get DB id for dentist office
+      const dentistID = this.markerDetails[markerID].dentistID
+      // change to dentist page
+      const date = moment(this.date).format('YYYY-MM-DD')
+      this.$router.push({ path: `/search-appointment/book-dentist/${dentistID}/${date}` })
     }
   },
   watch: {
     message: function (newVal, oldVal) {
-      if (this.message.topic === 'dentistimo/dentist-office/filtered-office') {
+      if (this.message.topic === 'dentistimo/dentist-office/filtered-office/' + this.user.idToken) {
         for (let i = 0; i < this.message.msg.length; i++) {
+          console.log(this.message.msg)
           this.markerDetails.push({
             id: this.markerDetails.length,
+            dentistID: this.message.msg[i].id,
             location: [this.message.msg[i].coordinate.latitude, this.message.msg[i].coordinate.longitude]
           })
         }

@@ -52,17 +52,15 @@ export default {
       showConnectionInformation: false,
       message: 'none',
       connection: {
-        protocol: 'wss',
-        host: 'e33e41c289ad4ac69ae5ef60f456e9c3.s2.eu.hivemq.cloud',
-        port: 8884,
+        protocol: 'ws',
+        host: 'broker.emqx.io',
+        port: 8083,
         endpoint: '/mqtt',
         keepalive: 60,
         clean: true,
         connectTimeout: 4000,
         reconnectPeriod: 4000,
-        clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
-        username: 'group6_dentistimo',
-        password: 'dentistimo123!'
+        clientId: `mqtt_${Math.random().toString(16).slice(3)}`
       },
       receiveNews: {},
       qosList: [0, 1, 2],
@@ -140,7 +138,7 @@ export default {
       }
     },
     doSubscribe(subTopic) {
-      const qos = 2
+      const qos = 0
       this.client.subscribe(subTopic, { qos }, (error, res) => {
         if (error) {
           console.log('Subscribe to topics error', error)

@@ -17,7 +17,10 @@
           </div>
           <p>{{event.time}}</p>
           <p class="mb-1">
-            Here goes the adress of the dentist and some other information
+            {{ event.address }}
+          </p>
+          <p class="mb-1">
+            {{ event.visitReason }}
           </p>
         </b-list-group-item>
       </b-list-group>
@@ -76,8 +79,8 @@ export default {
     }
   },
   mounted() {
-    this.$parent.doSubscribe('dentistimo/user-appointment/all-appointments')
-    const message = { userid: this.user.userId }
+    this.$parent.doSubscribe('dentistimo/user-appointment/all-appointments/' + this.user.idToken)
+    const message = { idToken: this.user.idToken }
     const payload = JSON.stringify(message)
     this.$parent.doPublish('dentistimo/user-appointment/get-all-appointments', payload)
   },
@@ -86,13 +89,18 @@ export default {
   },
   watch: {
     message: function (newVal, oldVal) {
-      for (let i = 0; i < this.message.msg.length; i++) {
-        const msg = this.message.msg[i]
+      console.log(this.message.msg)
+      const msg = JSON.parse(this.message.msg)
+      console.log(msg)
+      for (let i = 0; i < msg.length; i++) {
+        console.log(msg[i].time)
         const event = {
-          title: 'Dentist name',
-          start: `${msg.date}T${msg.time}:00`,
-          time: `${msg.date} ${msg.time}`,
-          key: msg.requestd
+          title: `${msg[i].name}`,
+          start: `${msg[i].date}T${msg[i].time}`,
+          time: `${msg[i].date} ${msg[i].time}`,
+          visitReason: `${msg[i].visitReason}`,
+          address: `${msg[i].address}`,
+          key: msg[i].date
         }
         this.calendarOptions.events.push(event)
       }
