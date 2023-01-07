@@ -38,8 +38,7 @@ export default {
   methods: {
     login() {
       // generate request id and subscribe to topic
-      // const requestId = Math.floor(Math.random() * 10000000)
-      const requestId = 1000
+      const requestId = Math.floor(Math.random() * 10000000)
       this.subTopic = `dentistimo/login/user/${requestId}`
       this.$parent.doSubscribe(this.subTopic)
       this.subTopicError = `dentistimo/login/error/${requestId}`
