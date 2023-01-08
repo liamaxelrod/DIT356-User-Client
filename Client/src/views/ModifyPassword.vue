@@ -58,10 +58,10 @@ export default {
     sendMail() {
       // generate request id and subscribe to topic
       const requestId = Math.floor(Math.random() * 10000000)
-      this.subTopicMail = `dentistimo/send-email-code/${requestId}`
+      this.subTopicMail = `dentistimo/send-email-code/user/${requestId}`
       this.$parent.doSubscribe(this.subTopicMail)
       // publish message
-      const pubTopic = 'dentistimo/send-email-code'
+      const pubTopic = 'dentistimo/send-email-code/user'
       const payload = `{"email": "${this.Email}", "requestId": "${requestId}"}`
       this.$parent.doPublish(pubTopic, payload)
     },

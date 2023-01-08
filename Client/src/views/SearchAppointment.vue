@@ -107,8 +107,6 @@ export default {
       this.$parent.doSubscribe(subscribeTopic)
     },
     markerSelected(markerID) {
-      console.log(markerID)
-      console.log(this.markerDetails[markerID])
       // get DB id for dentist office
       const dentistID = this.markerDetails[markerID].dentistID
       // change to dentist page
@@ -120,7 +118,6 @@ export default {
     message: function (newVal, oldVal) {
       if (this.message.topic === 'dentistimo/dentist-office/filtered-office/' + this.user.idToken) {
         for (let i = 0; i < this.message.msg.length; i++) {
-          console.log(this.message.msg)
           this.markerDetails.push({
             id: this.markerDetails.length,
             dentistID: this.message.msg[i].id,
